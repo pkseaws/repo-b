@@ -11,7 +11,4 @@ runs:
     - run: echo "Deploying Java app to ${{ inputs.env }}"
       shell: bash
       echo "Deploying ${{ inputs.language }} app to ${{ inputs.env }}"
-      run |
-        cat config/${{ inputs.env }}-config.json
-        chmod +x scripts/sample-script.sh
-        sh scripts/sample-script.sh
+     
