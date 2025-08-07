@@ -1,1 +1,13 @@
+name: Deploy Python
+description: Deploy Python app
+inputs:
+  env:
+    description: "Envirment required"
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - run: echo "Deploying Python app to ${{ inputs.env }}"
+      shell: bash
 
