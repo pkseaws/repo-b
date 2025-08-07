@@ -1,1 +1,12 @@
-
+name: Build Java
+description: Build Java application
+inputs:
+  working-directory:
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        cd ${{ inputs.working-directory }}
+        mvn clean install
+      shell: bash
