@@ -14,7 +14,7 @@ on:
         type: boolean
 
 jobs:
-  build-deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -24,29 +24,61 @@ jobs:
 
       - name: Build Java
         if: inputs.language == 'java'
-        uses: pkseaws/repo-b/build-java@main
+        uses: pkseaws/repo-b/build/build-java@main
         with:
           working-directory: java
 
       - name: Build Python
         if: inputs.language == 'python'
-        uses: pkseaws/repo-b/build-python@main
+        uses: pkseaws/repo-b/build/build-python@main
         with:
           working-directory: python
+  deploy:
+      needs: build
+      runs-on: ubuntu-latest
+      steps:
+        - uses: actions/checkout@v4
+        - name: Deploy Java
+          if: inputs.language == 'java'
+          uses: pkseaws/repo-b/deploy/deploy-java/@main
+          with:
+            working-directory: java
 
-      - name: Upload Artifact
-        if: inputs.upload_artifact == true
-        uses: pkseaws/repo-b/upload-artifact@main
-        with:
-          name: ${{ inputs.language }}-artifact
-          #path: ${{ inputs.language }}/
-          path: artifact-repo
-          env: ${{ inputs.env }}
-          version: ${{ env.BUILD_VERSION }}
+        - name: Deploy Python
+          if: inputs.language == 'python'
+          uses: pkseaws/repo-b/deploy/deploy-java@main
+          with:
+            working-directory: python
 
-      - name: Deploy
-        run: |
-          echo "Deploying ${{ inputs.language }} app to ${{ inputs.env }}"
-          cat config/${{ inputs.env }}-config.json
-          chmod +x scripts/sample-script.sh
-          sh scripts/sample-script.sh
+  upload_artifact:
+        needs: deploy
+        runs-on: ubuntu-latest
+          steps:
+            - uses: actions/checkout@v4
+            - name: Upload Artifact
+            if: inputs.upload_artifact == true
+            uses: pkseaws/repo-b/upload-artifact@main
+            with:
+            name: ${{ inputs.language }}-artifact
+            #path: ${{ inputs.language }}/
+            path: artifact-repo
+            env: ${{ inputs.env }}
+            version: ${{ env.BUILD_VERSION }}
+        
+
+      # - name: Upload Artifact
+      #   if: inputs.upload_artifact == true
+      #   uses: pkseaws/repo-b/upload-artifact@main
+      #   with:
+      #     name: ${{ inputs.language }}-artifact
+      #     #path: ${{ inputs.language }}/
+      #     path: artifact-repo
+      #     env: ${{ inputs.env }}
+      #     version: ${{ env.BUILD_VERSION }}
+
+      # - name: Deploy
+      #   run: |
+      #     echo "Deploying ${{ inputs.language }} app to ${{ inputs.env }}"
+      #     cat config/${{ inputs.env }}-config.json
+      #     chmod +x scripts/sample-script.sh
+      #     sh scripts/sample-script.sh
