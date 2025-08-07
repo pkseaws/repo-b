@@ -1,0 +1,49 @@
+name: Unified Build and Deployment
+
+on:
+  workflow_call:
+    inputs:
+      language:
+        required: true
+        type: string
+      env:
+        required: true
+        type: string
+      upload_artifact:
+        required: true
+        type: boolean
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up version
+        run: echo "BUILD_VERSION=1.0.${{ github.run_number }}" >> $GITHUB_ENV
+
+      - name: Build Java
+        if: inputs.language == 'java'
+        uses: ./build-java
+        with:
+          working-directory: java
+
+      - name: Build Python
+        if: inputs.language == 'python'
+        uses: ./build-python
+        with:
+          working-directory: python
+
+      - name: Upload Artifact
+        if: inputs.upload_artifact == true
+        uses: ./upload-artifact
+        with:
+          name: ${{ inputs.language }}-artifact
+          path: ${{ inputs.language }}/
+          env: ${{ inputs.env }}
+          version: ${{ env.BUILD_VERSION }}
+
+      - name: Deploy
+        run: |
+          echo "Deploying ${{ inputs.language }} app to ${{ inputs.env }}"
+          cat config/${{ inputs.env }}-config.json
