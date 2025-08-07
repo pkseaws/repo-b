@@ -12,6 +12,6 @@ runs:
       shell: bash
       echo "Deploying ${{ inputs.language }} app to ${{ inputs.env }}"
       run |
-      cat config/${{ inputs.env }}-config.json
-      chmod +x scripts/sample-script.sh
-      sh scripts/sample-script.sh
+        cat config/${{ inputs.env }}-config.json
+        chmod +x scripts/sample-script.sh
+        sh scripts/sample-script.sh
