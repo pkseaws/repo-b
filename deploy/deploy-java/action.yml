@@ -11,7 +11,5 @@ runs:
     - run: echo "Deploying Java app to ${{ inputs.env }}"
       shell: bash
       echo "Deploying ${{ inputs.language }} app to ${{ inputs.env }}"
-    - name: Run shell script
-      shell: bash
-      run: ./scripts/sample-script.sh
+   
      
