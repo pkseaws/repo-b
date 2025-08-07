@@ -1,1 +1,12 @@
+name: Deploy Java
+description: Deploy Java app
+inputs:
+  env:
+    description: "Envirment required"
+    required: true
 
+runs:
+  using: "composite"
+  steps:
+    - run: echo "Deploying Java app to ${{ inputs.env }}"
+      shell: bash
