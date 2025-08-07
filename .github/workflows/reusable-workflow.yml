@@ -24,19 +24,19 @@ jobs:
 
       - name: Build Java
         if: inputs.language == 'java'
-        uses: ./build-java
+        uses: pkseaws/repo-b/build-java@main
         with:
           working-directory: java
 
       - name: Build Python
         if: inputs.language == 'python'
-        uses: ./build-python
+        uses: pkseaws/repo-b/build-python@main
         with:
           working-directory: python
 
       - name: Upload Artifact
         if: inputs.upload_artifact == true
-        uses: ./upload-artifact
+        uses: pkseaws/repo-b/upload-artifact@main
         with:
           name: ${{ inputs.language }}-artifact
           path: ${{ inputs.language }}/
