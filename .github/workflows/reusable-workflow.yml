@@ -53,17 +53,17 @@ jobs:
   upload_artifact:
         needs: deploy
         runs-on: ubuntu-latest
-          steps:
-            - uses: actions/checkout@v4
-            - name: Upload Artifact
+        steps:
+          - uses: actions/checkout@v4
+          - name: Upload Artifact
             if: inputs.upload_artifact == true
             uses: pkseaws/repo-b/upload-artifact@main
             with:
-            name: ${{ inputs.language }}-artifact
-            #path: ${{ inputs.language }}/
-            path: artifact-repo
-            env: ${{ inputs.env }}
-            version: ${{ env.BUILD_VERSION }}
+             name: ${{ inputs.language }}-artifact
+             #path: ${{ inputs.language }}/
+             path: artifact-repo
+             env: ${{ inputs.env }}
+             version: ${{ env.BUILD_VERSION }}
         
 
       # - name: Upload Artifact
