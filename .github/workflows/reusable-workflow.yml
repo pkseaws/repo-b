@@ -39,7 +39,8 @@ jobs:
         uses: pkseaws/repo-b/upload-artifact@main
         with:
           name: ${{ inputs.language }}-artifact
-          path: ${{ inputs.language }}/
+          #path: ${{ inputs.language }}/
+          path: artifact-repo
           env: ${{ inputs.env }}
           version: ${{ env.BUILD_VERSION }}
 
