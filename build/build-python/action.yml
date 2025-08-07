@@ -1,1 +1,13 @@
-
+name: Build Python
+description: Build Python app
+inputs:
+  working-directory:
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - run: |
+        cd ${{ inputs.working-directory }}
+        pip install -r requirements.txt
+        python -m compileall .
+      shell: bash
