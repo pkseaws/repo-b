@@ -48,4 +48,5 @@ jobs:
         run: |
           echo "Deploying ${{ inputs.language }} app to ${{ inputs.env }}"
           cat config/${{ inputs.env }}-config.json
-          sh scripts/sample-scripts.sh
+          chmod +x scripts/sample-script.sh
+          sh scripts/sample-script.sh
