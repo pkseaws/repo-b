@@ -15,4 +15,5 @@ runs:
     - uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.name }}-${{ inputs.env }}-${{ inputs.version }}
-        path: ${{ inputs.path }}
+        #path: ${{ inputs.path }}
+        path: artifact-repo
