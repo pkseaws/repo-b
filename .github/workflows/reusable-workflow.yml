@@ -78,7 +78,7 @@ jobs:
               cat config/${{ inputs.env }}-config.json
               chmod +x scripts/*.sh
               sh scripts/sample-script.sh
-              sh scripts/deploy-env.sh
+              sh scripts/deploy-env.sh ${{ inputs.env }}
         - name: Upload Artifact
           if: inputs.upload_artifact == true
           uses: pkseaws/repo-b/upload-artifact@main
