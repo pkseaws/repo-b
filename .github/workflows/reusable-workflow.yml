@@ -76,8 +76,9 @@ jobs:
           run: |
               echo "Deploying ${{ inputs.language }} app to ${{ inputs.env }}"
               cat config/${{ inputs.env }}-config.json
-              chmod +x scripts/sample-script.sh
+              chmod +x scripts/*.sh
               sh scripts/sample-script.sh
+              sh scripts/deploy-env.sh
         - name: Upload Artifact
           if: inputs.upload_artifact == true
           uses: pkseaws/repo-b/upload-artifact@main
