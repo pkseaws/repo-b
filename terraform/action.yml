@@ -1,7 +1,7 @@
 name: Terraform Step
 description: Reusable Terraform CI/CD steps
 inputs:
-  terraform_dir:
+  working-directory:
     required: true
     description: Directory with Terraform code
 
@@ -16,15 +16,18 @@ runs:
       shell: bash
     - name: Terraform Init
       run: terraform init
-      working-directory: ${{ inputs.terraform_dir }}
+      #working-directory: ${{ inputs.terraform_dir }}
+      terraform-directory: ${{ inputs.working-directory }}
       shell: bash
 
     - name: Terraform Validate
       run: terraform validate
-      working-directory: ${{ inputs.terraform_dir }}
+      #working-directory: ${{ inputs.terraform_dir }}
+      terraform-directory: ${{ inputs.working-directory }}
       shell: bash
 
     - name: Terraform Plan
       run: terraform plan -out=tfplan
-      working-directory: ${{ inputs.terraform_dir }}
+      #working-directory: ${{ inputs.terraform_dir }}
+      terraform-directory: ${{ inputs.working-directory }}
       shell: bash
