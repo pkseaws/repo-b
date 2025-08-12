@@ -32,3 +32,6 @@ runs:
       #working-directory: ${{ inputs.terraform_dir }}
       working-directory: ${{ inputs.working-directory }}
       shell: bash
+    # - name: Terraform Apply
+      #  if: ${{ github.event_name == 'workflow_dispatch' }}
+       # run: terraform apply -auto-approve tfplan
