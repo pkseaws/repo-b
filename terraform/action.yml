@@ -17,17 +17,17 @@ runs:
     - name: Terraform Init
       run: terraform init
       #working-directory: ${{ inputs.terraform_dir }}
-      terraform-directory: ${{ inputs.working-directory }}
+      working-directory: ${{ inputs.working-directory }}
       shell: bash
 
     - name: Terraform Validate
       run: terraform validate
       #working-directory: ${{ inputs.terraform_dir }}
-      terraform-directory: ${{ inputs.working-directory }}
+      working-directory: ${{ inputs.working-directory }}
       shell: bash
 
     - name: Terraform Plan
       run: terraform plan -out=tfplan
       #working-directory: ${{ inputs.terraform_dir }}
-      terraform-directory: ${{ inputs.working-directory }}
+      working-directory: ${{ inputs.working-directory }}
       shell: bash
