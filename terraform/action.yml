@@ -10,6 +10,8 @@ runs:
   steps:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
+    - run |
+        echo "${{ inputs.terraform_dir }}"
 
     - name: Terraform Init
       run: terraform init
