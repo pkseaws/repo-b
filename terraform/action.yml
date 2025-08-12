@@ -13,7 +13,7 @@ runs:
     - name: show terraform dir
       run: |
         echo "${{ inputs.terraform_dir }}"
-
+      shell: bash
     - name: Terraform Init
       run: terraform init
       working-directory: ${{ inputs.terraform_dir }}
