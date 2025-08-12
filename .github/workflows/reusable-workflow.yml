@@ -75,18 +75,21 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      
       - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v3
+        uses: pkseaws/repo-b/terraform@main
+        with:
+         terraform_dir: 
+        #uses: hashicorp/setup-terraform@v3
 
-      - name: Terraform Init
-        run: terraform init
+      #- name: Terraform Init
+       # run: terraform init
 
-      - name: Terraform Validate
-        run: terraform validate
+      #- name: Terraform Validate
+       # run: terraform validate
 
-      - name: Terraform Plan
-        run: terraform plan -out=tfplan
+      #- name: Terraform Plan
+       # run: terraform plan -out=tfplan
 
      # - name: Terraform Apply
       #  if: ${{ github.event_name == 'workflow_dispatch' }}
