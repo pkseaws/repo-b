@@ -10,9 +10,10 @@ runs:
   steps:
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v3
-    - name: show terraform dir
+    - name: Configure AWS credentials
       run: |
-        echo "${{ inputs.terraform_dir }}"
+        echo "AWS Access Key: $AWS_ACCESS_KEY_ID"
+        echo "AWS Secret Key: $AWS_SECRET_ACCESS_KEY"
       shell: bash
     - name: Terraform Init
       run: terraform init
