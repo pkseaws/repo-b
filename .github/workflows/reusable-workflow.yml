@@ -107,7 +107,7 @@ jobs:
             version: ${{ env.BUILD_VERSION }}
    deploy-upload-prod:
        needs: [ build_dev_stage, build_prod ]
-       if: ${{ success('build_dev_stage') || success('build_prod') && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+       if: ${{ success('build_dev_stage') || success('build_prod') && github.event_name == 'push' }}
        #if: github.event_name == 'pull_request'
        #runs-on: ubuntu-latest
        strategy:
