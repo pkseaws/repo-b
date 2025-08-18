@@ -74,7 +74,7 @@ jobs:
            working-directory: python
    deploy-upload-dev-stage:
        needs: [ build_dev_stage, build_prod ]
-       if: ${{ success('build_dev_stage') || success('build_prod') }}
+       if: ${{ success('build_dev_stage') || success('build_prod') && github.event_name == 'pull_request' }}
        #if: github.event_name == 'pull_request'
        #runs-on: ubuntu-latest
        strategy:
