@@ -68,7 +68,7 @@ jobs:
  
 
   deploy-upload:
-      #needs: [ build_pull, build_push ]
+      needs: [ build_pull, build_push ]
       if: ${{ success('build_pull') || success('build_push') }}
       runs-on: ubuntu-latest
       steps:
