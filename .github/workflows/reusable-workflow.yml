@@ -20,90 +20,117 @@ on:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
+  
+jobs: 
+   build:
+     if: github.event_name == 'pull_request'
+     runs-on: ubuntu-latest
+     strategy:
+       matrix:
+         language: [java, python]
+         env: [dev, stage]
+     #if: github.event_name == 'pull_request'
+     steps:
+       - uses: actions/checkout@v4
 
-jobs:
-  build_pull:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+       - name: Set up version
+         run: echo "BUILD_VERSION=1.0.${{ github.run_number }}" >> $GITHUB_ENV
 
-      - name: Set up version
-        run: echo "BUILD_VERSION=1.0.${{ github.run_number }}" >> $GITHUB_ENV
+       - name: Build Java
+         if: inputs.language == 'java'
+         uses: pkseaws/repo-b/build/build-java@main
+         with:
+           working-directory: java
 
-      - name: Build Java
-        if: inputs.language == 'java'
-        uses: pkseaws/repo-b/build/build-java@main
-        with:
-          working-directory: java
+       - name: Build Python
+         if: inputs.language == 'python'
+         uses: pkseaws/repo-b/build/build-python@main
+         with:
+           working-directory: python
+    
+# jobs:
+#   build_pull:
+#     if: github.event_name == 'pull_request'
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - name: Build Python
-        if: inputs.language == 'python'
-        uses: pkseaws/repo-b/build/build-python@main
-        with:
-          working-directory: python
+#       - name: Set up version
+#         run: echo "BUILD_VERSION=1.0.${{ github.run_number }}" >> $GITHUB_ENV
+
+#       - name: Build Java
+#         if: inputs.language == 'java'
+#         uses: pkseaws/repo-b/build/build-java@main
+#         with:
+#           working-directory: java
+
+#       - name: Build Python
+#         if: inputs.language == 'python'
+#         uses: pkseaws/repo-b/build/build-python@main
+#         with:
+#           working-directory: python
 
 
-  build_push:
-    #if: github.event_name == 'pull_request'
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+#   build_push:
+#     #if: github.event_name == 'pull_request'
+#     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v4
 
-      - name: Set up version
-        run: echo "BUILD_VERSION=1.0.${{ github.run_number }}" >> $GITHUB_ENV
+#       - name: Set up version
+#         run: echo "BUILD_VERSION=1.0.${{ github.run_number }}" >> $GITHUB_ENV
 
-      - name: Build Java
-        if: inputs.language == 'java'
-        uses: pkseaws/repo-b/build/build-java@main
-        with:
-          working-directory: java
+#       - name: Build Java
+#         if: inputs.language == 'java'
+#         uses: pkseaws/repo-b/build/build-java@main
+#         with:
+#           working-directory: java
 
-      - name: Build Python
-        if: inputs.language == 'python'
-        uses: pkseaws/repo-b/build/build-python@main
-        with:
-          working-directory: python
+#       - name: Build Python
+#         if: inputs.language == 'python'
+#         uses: pkseaws/repo-b/build/build-python@main
+#         with:
+#           working-directory: python
  
 
-  deploy-upload:
-      needs: [ build_pull, build_push ]
-      if: ${{ success('build_pull') || success('build_push') }}
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4
-        - name: Set up version
-          run: echo "BUILD_VERSION=1.0.${{ github.run_number }}" >> $GITHUB_ENV
-        - name: Deploy
-          run: |
-              echo "Deploying ${{ inputs.language }} app to ${{ inputs.env }}"
-              #cat config/${{ inputs.env }}-config.json
-              chmod +x scripts/*.sh
-              sh scripts/sample-script.sh
-              sh scripts/deploy-env.sh ${{ inputs.env }}
-        - name: Upload Artifact
-          if: inputs.upload_artifact == true
-          uses: pkseaws/repo-b/upload-artifact@main
-          with:
-           name: ${{ inputs.language }}-artifact
-           path: ${{ inputs.language }}/
-           #path: artifact-repo
-           env: ${{ inputs.env }}
-           version: ${{ env.BUILD_VERSION }}
-  terraform:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+#   deploy-upload:
+#       needs: [ build_pull, build_push ]
+#       if: ${{ success('build_pull') || success('build_push') }}
+#       runs-on: ubuntu-latest
+#       steps:
+#         - uses: actions/checkout@v4
+#         - name: Set up version
+#           run: echo "BUILD_VERSION=1.0.${{ github.run_number }}" >> $GITHUB_ENV
+#         - name: Deploy
+#           run: |
+#               echo "Deploying ${{ inputs.language }} app to ${{ inputs.env }}"
+#               #cat config/${{ inputs.env }}-config.json
+#               chmod +x scripts/*.sh
+#               sh scripts/sample-script.sh
+#               sh scripts/deploy-env.sh ${{ inputs.env }}
+#         - name: Upload Artifact
+#           if: inputs.upload_artifact == true
+#           uses: pkseaws/repo-b/upload-artifact@main
+#           with:
+#            name: ${{ inputs.language }}-artifact
+#            path: ${{ inputs.language }}/
+#            #path: artifact-repo
+#            env: ${{ inputs.env }}
+#            version: ${{ env.BUILD_VERSION }}
+#   terraform:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout repository
+#         uses: actions/checkout@v4
       
-      - name: Set up Terraform
-        uses: pkseaws/repo-b/terraform@main
-        with:
-         working-directory: terraform
-        env:
-         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#       - name: Set up Terraform
+#         uses: pkseaws/repo-b/terraform@main
+#         with:
+#          working-directory: terraform
+#         env:
+#          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       
 
      
