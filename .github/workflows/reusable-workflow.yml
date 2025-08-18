@@ -131,11 +131,11 @@ jobs:
            if: inputs.upload_artifact == true
            uses: pkseaws/repo-b/upload-artifact@main
            with:
-            name: ${{ inputs.language }}-artifact
+            name: ${{ matrix.language }}-artifact
             #path: ${{ inputs.language }}
             #path: artifact-repo
             path: .
-            env: ${{ inputs.env }}
+            env: ${{ matrix.env }}
             version: ${{ env.BUILD_VERSION }}
 
 
