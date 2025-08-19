@@ -73,8 +73,8 @@ jobs:
          with:
            working-directory: python
    deploy-upload-dev-stage:
-       needs: [ build_dev_stage, build_prod ]
-       if: ${{ success('build_dev_stage') || success('build_prod') && github.event_name == 'pull_request' }}
+       needs: [ build_dev_stage]
+       #if: ${{ success('build_dev_stage') || success('build_prod') && github.event_name == 'pull_request' }}
            
        strategy:
         matrix:
@@ -103,8 +103,8 @@ jobs:
             env: ${{ matrix.env }}
             version: ${{ env.BUILD_VERSION }}
    deploy-upload-prod:
-       needs: [ build_dev_stage, build_prod ]
-       if: ${{ success('build_dev_stage') || success('build_prod') && github.event_name == 'push' }}
+       needs: [ build_prod ]
+       #if: ${{ success('build_dev_stage') || success('build_prod') && github.event_name == 'push' }}
        
        strategy:
         matrix:
